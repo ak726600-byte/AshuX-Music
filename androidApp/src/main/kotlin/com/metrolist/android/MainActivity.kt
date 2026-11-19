@@ -1,4 +1,17 @@
 package com.metrolist.android
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
+import com.metrolist.android.ui.AshuPrefs
+import com.metrolist.android.ui.AshuWelcomeOverlay
+import java.io.File
 
 import android.content.Context
 import android.content.Intent
@@ -309,7 +322,13 @@ class MainActivity : ComponentActivity() {
                 var onboardingComplete by remember { mutableStateOf(app.onboardingManager.isComplete) }
                 Box(Modifier.fillMaxSize().onGloballyPositioned { startupPresentation.contentLaidOut = true }) {
                     if (onboardingComplete) {
-                        MetrolistApp(
+                        var showAshuWelcome by rememberSaveable { mutableStateOf(true) }
+                val playerBg = AshuPrefs.getImage(this@MainActivity, "player_bg")
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (playerBg != null) {
+                        AsyncImage(model = File(playerBg), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize().alpha(0.25f))
+                    }
+                    MetrolistApp(
                             navigationSaveKey = navigationRestoration.saveKey,
                             incomingIntent = incomingIntentState.value,
                             incomingPlaybackSong = incomingPlaybackSong,
@@ -321,6 +340,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                         )
+                    if (showAshuWelcome) { AshuWelcomeOverlay(onFinished = { showAshuWelcome = false }) }
+                }
                     } else {
                         val tvDevice = remember { isAndroidTv() }
                         CompositionLocalProvider(LocalIsTv provides tvDevice) {
