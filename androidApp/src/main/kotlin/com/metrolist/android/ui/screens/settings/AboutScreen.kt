@@ -6,8 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,20 +18,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.metrolist.android.LocalNavigator
 import com.metrolist.android.ui.AshuCustomizationDialog
 import com.metrolist.android.ui.AshuPrefs
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen() {
-    val navigator = LocalNavigator.current
+fun AndroidAboutScreen(onBack: () -> Unit = {}) {
     val context = LocalContext.current
     var showCustomize by remember { mutableStateOf(false) }
     var refreshKey by remember { mutableIntStateOf(0) }
     val dpPath = remember(refreshKey) { AshuPrefs.getImage(context, "dp") }
-    val userName = remember(refreshKey) { AshuPrefs.getName(context) }
 
     if (showCustomize) {
         AshuCustomizationDialog(
@@ -47,8 +42,8 @@ fun AboutScreen() {
             TopAppBar(
                 title = { Text("About AshuX Music") },
                 navigationIcon = {
-                    IconButton(onClick = { navigator.navigateUp() }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                    TextButton(onClick = onBack) {
+                        Text("Back", fontWeight = FontWeight.Bold)
                     }
                 }
             )
@@ -108,4 +103,9 @@ fun AboutScreen() {
             }
         }
     }
+}
+
+@Composable
+fun AboutScreen(onBack: () -> Unit = {}) {
+    AndroidAboutScreen(onBack = onBack)
 }
