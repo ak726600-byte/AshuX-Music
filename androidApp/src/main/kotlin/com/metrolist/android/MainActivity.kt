@@ -1,11 +1,5 @@
 package com.metrolist.android
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
@@ -45,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -322,23 +317,12 @@ class MainActivity : ComponentActivity() {
                 Box(Modifier.fillMaxSize().onGloballyPositioned { startupPresentation.contentLaidOut = true }) {
                     if (onboardingComplete) {
                         var showAshuWelcome by rememberSaveable { mutableStateOf(true) }
-                val playerBg = AshuPrefs.getImage(this@MainActivity, "player_bg")
-                Box(modifier = Modifier.fillMaxSize()) {
-                    if (playerBg != null) {
-                        AsyncImage(model = File(playerBg), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize().alpha(0.25f))
-                    }
-                    var showAshuWelcome by rememberSaveable { mutableStateOf(true) }
-                val playerBg = AshuPrefs.getImage(this@MainActivity, "player_bg")
-                Box(modifier = Modifier.fillMaxSize()) {
-                    if (playerBg != null) {
-                        AsyncImage(
-                            model = File(playerBg),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize().alpha(0.25f)
-                        )
-                    }
-                    MetrolistApp(
+                        val playerBg = AshuPrefs.getImage(this@MainActivity, "player_bg")
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            if (playerBg != null) {
+                                AsyncImage(model = File(playerBg), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize().alpha(0.25f))
+                            }
+                        MetrolistApp(
                             navigationSaveKey = navigationRestoration.saveKey,
                             incomingIntent = incomingIntentState.value,
                             incomingPlaybackSong = incomingPlaybackSong,
@@ -350,10 +334,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                         )
-                    if (showAshuWelcome) { AshuWelcomeOverlay(onFinished = { showAshuWelcome = false }) }
-                }
-                    if (showAshuWelcome) { AshuWelcomeOverlay(onFinished = { showAshuWelcome = false }) }
-                }
+                            if (showAshuWelcome) { AshuWelcomeOverlay(onFinished = { showAshuWelcome = false }) }
+                        }
                     } else {
                         val tvDevice = remember { isAndroidTv() }
                         CompositionLocalProvider(LocalIsTv provides tvDevice) {
