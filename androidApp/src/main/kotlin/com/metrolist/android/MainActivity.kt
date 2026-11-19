@@ -1,4 +1,5 @@
 package com.metrolist.android
+import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
@@ -326,6 +327,17 @@ class MainActivity : ComponentActivity() {
                     if (playerBg != null) {
                         AsyncImage(model = File(playerBg), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize().alpha(0.25f))
                     }
+                    var showAshuWelcome by rememberSaveable { mutableStateOf(true) }
+                val playerBg = AshuPrefs.getImage(this@MainActivity, "player_bg")
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (playerBg != null) {
+                        AsyncImage(
+                            model = File(playerBg),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize().alpha(0.25f)
+                        )
+                    }
                     MetrolistApp(
                             navigationSaveKey = navigationRestoration.saveKey,
                             incomingIntent = incomingIntentState.value,
@@ -338,6 +350,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                         )
+                    if (showAshuWelcome) { AshuWelcomeOverlay(onFinished = { showAshuWelcome = false }) }
+                }
                     if (showAshuWelcome) { AshuWelcomeOverlay(onFinished = { showAshuWelcome = false }) }
                 }
                     } else {

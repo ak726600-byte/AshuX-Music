@@ -6,6 +6,7 @@
  */
 
 package com.metrolist.android.ui.screens
+import androidx.compose.ui.draw.alpha
 import com.metrolist.android.ui.AshuPrefs
 import coil3.compose.AsyncImage
 import java.io.File
@@ -171,8 +172,22 @@ fun SearchScreen(
     floatingActionsBottomInset: State<Dp>,
     initialQuery: String? = null,
     onSearchResultsVisible: (Boolean) -> Unit = {
+    val ashuSearchCtx = LocalContext.current
+    val ashuSearchBg = AshuPrefs.getImage(ashuSearchCtx, "search_bg")
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (ashuSearchBg != null) {
+            AsyncImage(
+                model = File(ashuSearchBg),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().alpha(0.25f)
+            )
+        }
+
     val ashuCtx = androidx.compose.ui.platform.LocalContext.current
     val ashuSearchBg = AshuPrefs.getImage(ashuCtx, "search_bg")
+
+    }
 },
     searchViewModel: SearchViewModel = koinViewModel(),
 ) {

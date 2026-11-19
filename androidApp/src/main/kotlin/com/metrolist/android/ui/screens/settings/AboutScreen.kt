@@ -24,7 +24,10 @@ import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AndroidAboutScreen(onBack: () -> Unit = {}) {
+fun AndroidAboutScreen(
+    onBack: () -> Unit = {},
+    onDevtoolsUnlocked: () -> Unit = {}
+) {
     val context = LocalContext.current
     var showCustomize by remember { mutableStateOf(false) }
     var refreshKey by remember { mutableIntStateOf(0) }
@@ -103,9 +106,4 @@ fun AndroidAboutScreen(onBack: () -> Unit = {}) {
             }
         }
     }
-}
-
-@Composable
-fun AboutScreen(onBack: () -> Unit = {}) {
-    AndroidAboutScreen(onBack = onBack)
 }
